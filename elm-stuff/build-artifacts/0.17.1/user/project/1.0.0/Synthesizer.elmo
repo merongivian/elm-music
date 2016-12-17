@@ -1,0 +1,43 @@
+var _user$project$Synthesizer$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'KeyDown') {
+			return {
+				ctor: '_Tuple2',
+				_0: false,
+				_1: _user$project$Audio$playKey(_p0._0)
+			};
+		} else {
+			return {ctor: '_Tuple2', _0: true, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$Synthesizer$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(model))
+			]));
+};
+var _user$project$Synthesizer$init = {ctor: '_Tuple2', _0: false, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Synthesizer$KeyDown = function (a) {
+	return {ctor: 'KeyDown', _0: a};
+};
+var _user$project$Synthesizer$KeyUp = function (a) {
+	return {ctor: 'KeyUp', _0: a};
+};
+var _user$project$Synthesizer$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$keyboard$Keyboard$downs(_user$project$Synthesizer$KeyDown),
+				_elm_lang$keyboard$Keyboard$ups(_user$project$Synthesizer$KeyUp)
+			]));
+};
+var _user$project$Synthesizer$main = {
+	main: _elm_lang$html$Html_App$program(
+		{init: _user$project$Synthesizer$init, view: _user$project$Synthesizer$view, update: _user$project$Synthesizer$update, subscriptions: _user$project$Synthesizer$subscriptions})
+};

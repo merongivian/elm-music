@@ -1,0 +1,7 @@
+var _user$project$Cmds$helloFromJs = _elm_lang$core$Native_Platform.outgoingPort(
+	'helloFromJs',
+	function (v) {
+		return null;
+	});
+var _user$project$Cmds$imJs = _user$project$Cmds$helloFromJs(
+	{ctor: '_Tuple0'});

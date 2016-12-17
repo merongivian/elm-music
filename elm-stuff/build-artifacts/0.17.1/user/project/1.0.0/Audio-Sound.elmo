@@ -1,0 +1,6 @@
+var _user$project$Audio_Sound$play = _elm_lang$core$Native_Platform.outgoingPort(
+	'play',
+	function (v) {
+		return v;
+	});
+var _user$project$Audio_Sound$playKey = _user$project$Audio_Sound$play(440);

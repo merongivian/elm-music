@@ -1,15 +1,16 @@
-module Subs exposing (..)
+module Synthesizer exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.App
 import Keyboard
+import Audio
 
 -- MODEL
 
-type alias Model = Int
+type alias Volume = Bool
 
-init : ( Model, Cmd Msg )
-init = ( 0, Cmd.none )
+init : ( Volume, Cmd Msg )
+init = ( False, Cmd.none )
 
 -- MESSAGES
 
@@ -17,22 +18,23 @@ type Msg = KeyUp Keyboard.KeyCode | KeyDown Keyboard.KeyCode
 
 -- VIEW
 
-view : Model -> Html Msg
+view : Volume -> Html Msg
 view model =
   div []
       [ text (toString model) ]
 
 -- UPDATE
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Volume -> ( Volume, Cmd Msg )
 update msg model =
   case msg of
-    KeyDown _ -> ( model + 1, Cmd.none )
-    KeyUp _ -> ( model + 1, Cmd.none )
+    KeyDown code ->
+      ( False, (Audio.playKey code) )
+    KeyUp _ -> ( True, Cmd.none )
 
 -- SUBSCRIPTIONS
 
-subscriptions : Model -> Sub Msg
+subscriptions : Volume -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Keyboard.downs KeyDown
