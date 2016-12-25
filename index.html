@@ -9,27 +9,29 @@
     <script type="text/javascript" charset="utf-8">
       var app = Elm.Synthesizer.fullscreen()
       var context = new AudioContext();
-
-      var osc = context.createOscillator();
       var vol = context.createGain();
-
-      osc.connect(vol);
       vol.connect(context.destination);
 
-      // since frequency will be set by default
-      // and oscillator will always be playing, and
-      // we dont want to listen it, just turn off volume
+      // create oscillator when first played
+      var osc = context.createOscillator();
 
-      vol.gain.value = 0;
-      osc.start();
+      app.ports.play.subscribe(function (args) {
+        var frequency = args[0];
+        var handleKeyDown = args[1];
 
-      app.ports.play.subscribe(function (frequency) {
+        if (!handleKeyDown) return;
+
+        osc = context.createOscillator();
         osc.frequency.value = frequency;
+
         vol.gain.value = 1;
+        osc.connect(vol);
+        osc.start();
       });
 
       app.ports.stop.subscribe(function () {
         vol.gain.value = 0;
+        osc.disconnect();
       });
     </script>
   </body>

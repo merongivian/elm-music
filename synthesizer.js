@@ -8245,7 +8245,7 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
-var _user$project$Audio$toNoteTuple = function (key) {
+var _user$project$Music$toNoteTuple = function (key) {
 	var _p0 = key;
 	switch (_p0) {
 		case 65:
@@ -8282,7 +8282,7 @@ var _user$project$Audio$toNoteTuple = function (key) {
 			return {ctor: '_Tuple2', _0: 'C', _1: 1};
 	}
 };
-var _user$project$Audio$noteOffset = function (note) {
+var _user$project$Music$noteOffset = function (note) {
 	var _p1 = note;
 	switch (_p1) {
 		case 'B#':
@@ -8331,8 +8331,8 @@ var _user$project$Audio$noteOffset = function (note) {
 			return 0;
 	}
 };
-var _user$project$Audio$baseOctaveNoteToFrequency = function (note) {
-	var distance = _user$project$Audio$noteOffset(note);
+var _user$project$Music$baseOctaveNoteToFrequency = function (note) {
+	var distance = _user$project$Music$noteOffset(note);
 	var middleC = 440 * Math.pow(
 		Math.pow(2, 1 / 12),
 		-9);
@@ -8340,30 +8340,33 @@ var _user$project$Audio$baseOctaveNoteToFrequency = function (note) {
 		Math.pow(2, 1 / 12),
 		_elm_lang$core$Basics$toFloat(distance));
 };
-var _user$project$Audio$octaveNoteToFrequency = function (_p2) {
+var _user$project$Music$octaveNoteToFrequency = function (_p2) {
 	var _p3 = _p2;
 	var octaveDiff = _p3._1 - 4;
-	return _user$project$Audio$baseOctaveNoteToFrequency(_p3._0) * Math.pow(2, octaveDiff);
+	return _user$project$Music$baseOctaveNoteToFrequency(_p3._0) * Math.pow(2, octaveDiff);
 };
-var _user$project$Audio$keyToFrequency = function (key) {
-	return _user$project$Audio$octaveNoteToFrequency(
-		_user$project$Audio$toNoteTuple(key));
+var _user$project$Music$keyToFrequency = function (key) {
+	return _user$project$Music$octaveNoteToFrequency(
+		_user$project$Music$toNoteTuple(key));
 };
-var _user$project$Audio$play = _elm_lang$core$Native_Platform.outgoingPort(
+var _user$project$Music$play = _elm_lang$core$Native_Platform.outgoingPort(
 	'play',
 	function (v) {
-		return v;
+		return [v._0, v._1];
 	});
-var _user$project$Audio$playKey = function (key) {
-	var frequency = _user$project$Audio$keyToFrequency(key);
-	return _user$project$Audio$play(frequency);
-};
-var _user$project$Audio$stop = _elm_lang$core$Native_Platform.outgoingPort(
+var _user$project$Music$playKey = F2(
+	function (key, on) {
+		var handleKeyDown = _elm_lang$core$Basics$not(on);
+		var frequency = _user$project$Music$keyToFrequency(key);
+		return _user$project$Music$play(
+			{ctor: '_Tuple2', _0: frequency, _1: handleKeyDown});
+	});
+var _user$project$Music$stop = _elm_lang$core$Native_Platform.outgoingPort(
 	'stop',
 	function (v) {
 		return null;
 	});
-var _user$project$Audio$mute = _user$project$Audio$stop(
+var _user$project$Music$mute = _user$project$Music$stop(
 	{ctor: '_Tuple0'});
 
 var _user$project$Synthesizer$update = F2(
@@ -8372,11 +8375,11 @@ var _user$project$Synthesizer$update = F2(
 		if (_p0.ctor === 'KeyDown') {
 			return {
 				ctor: '_Tuple2',
-				_0: false,
-				_1: _user$project$Audio$playKey(_p0._0)
+				_0: true,
+				_1: A2(_user$project$Music$playKey, _p0._0, model)
 			};
 		} else {
-			return {ctor: '_Tuple2', _0: true, _1: _user$project$Audio$mute};
+			return {ctor: '_Tuple2', _0: false, _1: _user$project$Music$mute};
 		}
 	});
 var _user$project$Synthesizer$view = function (model) {
