@@ -8,7 +8,7 @@ var _user$project$Synthesizer$update = F2(
 				_1: _user$project$Audio$playKey(_p0._0)
 			};
 		} else {
-			return {ctor: '_Tuple2', _0: true, _1: _elm_lang$core$Platform_Cmd$none};
+			return {ctor: '_Tuple2', _0: true, _1: _user$project$Audio$mute};
 		}
 	});
 var _user$project$Synthesizer$view = function (model) {

@@ -8358,6 +8358,13 @@ var _user$project$Audio$playKey = function (key) {
 	var frequency = _user$project$Audio$keyToFrequency(key);
 	return _user$project$Audio$play(frequency);
 };
+var _user$project$Audio$stop = _elm_lang$core$Native_Platform.outgoingPort(
+	'stop',
+	function (v) {
+		return null;
+	});
+var _user$project$Audio$mute = _user$project$Audio$stop(
+	{ctor: '_Tuple0'});
 
 var _user$project$Synthesizer$update = F2(
 	function (msg, model) {
@@ -8369,7 +8376,7 @@ var _user$project$Synthesizer$update = F2(
 				_1: _user$project$Audio$playKey(_p0._0)
 			};
 		} else {
-			return {ctor: '_Tuple2', _0: true, _1: _elm_lang$core$Platform_Cmd$none};
+			return {ctor: '_Tuple2', _0: true, _1: _user$project$Audio$mute};
 		}
 	});
 var _user$project$Synthesizer$view = function (model) {

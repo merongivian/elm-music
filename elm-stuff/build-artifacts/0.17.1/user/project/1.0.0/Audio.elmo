@@ -111,3 +111,10 @@ var _user$project$Audio$playKey = function (key) {
 	var frequency = _user$project$Audio$keyToFrequency(key);
 	return _user$project$Audio$play(frequency);
 };
+var _user$project$Audio$stop = _elm_lang$core$Native_Platform.outgoingPort(
+	'stop',
+	function (v) {
+		return null;
+	});
+var _user$project$Audio$mute = _user$project$Audio$stop(
+	{ctor: '_Tuple0'});

@@ -30,7 +30,8 @@ update msg model =
   case msg of
     KeyDown code ->
       ( False, (Audio.playKey code) )
-    KeyUp _ -> ( True, Cmd.none )
+    KeyUp _ ->
+      ( True, Audio.mute )
 
 -- SUBSCRIPTIONS
 

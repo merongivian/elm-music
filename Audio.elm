@@ -4,6 +4,7 @@ import Dict exposing (Dict)
 import Maybe exposing (Maybe)
 
 port play : (Float) -> Cmd msg
+port stop : () -> Cmd msg
 
 type alias Note = String
 type alias Frequency = Float
@@ -78,3 +79,7 @@ playKey key =
   let frequency = keyToFrequency key
   in
       play (frequency)
+
+mute : Cmd mg
+mute =
+  stop ()
