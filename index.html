@@ -15,6 +15,8 @@
       // create oscillator when first played
       var osc = context.createOscillator();
 
+      currentPlayedOscillators = {};
+
       app.ports.play.subscribe(function (args) {
         var frequency = args[0];
         var handleKeyDown = args[1];
@@ -27,11 +29,15 @@
         vol.gain.value = 1;
         osc.connect(vol);
         osc.start();
+        currentPlayedOscillators[frequency] = osc;
       });
 
-      app.ports.stop.subscribe(function () {
+      app.ports.stop.subscribe(function (frequency) {
+        osc = currentPlayedOscillators[frequency]
         vol.gain.value = 0;
         osc.disconnect();
+        osc = null;
+        currentPlayedOscillators[frequency] = null;
       });
     </script>
   </body>
