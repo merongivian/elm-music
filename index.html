@@ -10,12 +10,11 @@
       var app = Elm.Synthesizer.fullscreen()
       var context = new AudioContext();
       var vol = context.createGain();
+
+      vol.gain.value = 1;
       vol.connect(context.destination);
 
-      // create oscillator when first played
-      var osc = context.createOscillator();
-
-      currentPlayedOscillators = {};
+      var currentPlayedOscillators = {};
 
       app.ports.play.subscribe(function (frequency) {
         console.log(frequency)
@@ -23,18 +22,21 @@
         osc = context.createOscillator();
         osc.frequency.value = frequency;
 
-        vol.gain.value = 1;
         osc.connect(vol);
         osc.start();
         currentPlayedOscillators[frequency] = osc;
+        console.log('start');
+        console.log(currentPlayedOscillators);
       });
 
       app.ports.stop.subscribe(function (frequency) {
         osc = currentPlayedOscillators[frequency]
-        vol.gain.value = 0;
+        osc.stop();
         osc.disconnect();
         osc = null;
-        currentPlayedOscillators[frequency] = null;
+        delete currentPlayedOscillators[frequency];
+        console.log('stop');
+        console.log(currentPlayedOscillators);
       });
     </script>
   </body>

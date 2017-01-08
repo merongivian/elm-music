@@ -29,16 +29,19 @@ view model =
 
 update : Msg -> CurrentKeys -> ( CurrentKeys, Cmd Msg )
 update msg model =
-  let removeFromCurrentKeys code = List.filter (\code -> code /= code) model
-  in
-    case msg of
-      KeyDown code ->
-        if (List.member code model) then
-          ( model, Cmd.none )
-        else
-          ( code :: model, (Music.playKey code) )
-      KeyUp code ->
-        ( removeFromCurrentKeys code, Music.mute code )
+  case msg of
+    KeyDown code ->
+      if (List.member code model) then
+        ( model, Cmd.none )
+      else
+        ( code :: model, (Music.playKey code) )
+    KeyUp code ->
+      if (List.member code model) then
+        let removeFromCurrentKeys keycode = List.filter (\savedCode -> savedCode /= keycode) model
+        in
+          ( removeFromCurrentKeys code, Music.mute code )
+      else
+        ( model, Cmd.none )
 
 -- SUBSCRIPTIONS
 
