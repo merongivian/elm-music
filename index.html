@@ -17,11 +17,8 @@
 
       currentPlayedOscillators = {};
 
-      app.ports.play.subscribe(function (args) {
-        var frequency = args[0];
-        var handleKeyDown = args[1];
-
-        if (!handleKeyDown) return;
+      app.ports.play.subscribe(function (frequency) {
+        console.log(frequency)
 
         osc = context.createOscillator();
         osc.frequency.value = frequency;

@@ -3,7 +3,7 @@ port module Music exposing (..)
 import Dict exposing (Dict)
 import Maybe exposing (Maybe)
 
-port play : (Float, Bool) -> Cmd msg
+port play : (Float) -> Cmd msg
 port stop : (Float) -> Cmd msg
 
 type alias Note = String
@@ -74,11 +74,11 @@ keyToFrequency : Key -> Frequency
 keyToFrequency key =
   octaveNoteToFrequency (toNoteTuple key)
 
-playKey : Key -> Bool -> Cmd msg
-playKey key handlePlay =
+playKey : Key -> Cmd msg
+playKey key =
   let frequency = keyToFrequency key
   in
-      play (frequency, handlePlay)
+      play (frequency)
 
 mute : Key -> Cmd mg
 mute key =
