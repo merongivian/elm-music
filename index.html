@@ -8,36 +8,41 @@
   <body>
     <script type="text/javascript" charset="utf-8">
       var app = Elm.Synthesizer.fullscreen()
+
       var context = new AudioContext();
-      var vol = context.createGain();
-
-      vol.gain.value = 1;
-      vol.connect(context.destination);
-
-      var currentPlayedOscillators = {};
+      initAudioElements(context);
 
       app.ports.play.subscribe(function (frequency) {
-        console.log(frequency)
-
         osc = context.createOscillator();
         osc.frequency.value = frequency;
 
         osc.connect(vol);
         osc.start();
         currentPlayedOscillators[frequency] = osc;
-        console.log('start');
-        console.log(currentPlayedOscillators);
       });
 
       app.ports.stop.subscribe(function (frequency) {
         osc = currentPlayedOscillators[frequency]
-        osc.stop();
-        osc.disconnect();
-        osc = null;
-        delete currentPlayedOscillators[frequency];
-        console.log('stop');
-        console.log(currentPlayedOscillators);
+          // Seems that Web Audio Api sometimes creates the oscillator
+          // but it can't be found inside Javascript (probably because of)
+          // performance issues, this forces to load audio context
+          // elements
+          if (osc == null) {
+            vol.disconnect();
+            initAudioElements(context);
+          } else {
+            osc.disconnect();
+            delete currentPlayedOscillators[frequency];
+          }
       });
+
+      function initAudioElements(audioContext) {
+        window.vol = context.createGain();
+        window.currentPlayedOscillators = {};
+
+        vol.gain.value = 1;
+        vol.connect(context.destination);
+      };
     </script>
   </body>
 </html>
