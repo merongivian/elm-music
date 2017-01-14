@@ -10,9 +10,12 @@
       var app = Elm.Synthesizer.fullscreen()
 
       var context = new AudioContext();
+      var decayConstant =  0.1;
       initAudioElements(context);
 
       app.ports.play.subscribe(function (frequency) {
+        vol.gain.linearRampToValueAtTime(1, context.currentTime + decayConstant);
+
         osc = context.createOscillator();
         osc.frequency.value = frequency;
 
@@ -23,22 +26,27 @@
 
       app.ports.stop.subscribe(function (frequency) {
         osc = currentPlayedOscillators[frequency]
-          // Seems that Web Audio Api sometimes creates the oscillator
-          // but it can't be found inside Javascript (probably because of)
-          // performance issues, this forces to load audio context
-          // elements
-          if (osc == null) {
-            vol.disconnect();
-            initAudioElements(context);
-          } else {
-            osc.disconnect();
-            delete currentPlayedOscillators[frequency];
-          }
+
+        vol.gain.linearRampToValueAtTime(0, context.currentTime + decayConstant);
+        osc.stop(context.currentTime + decayConstant);
+
+        // Seems that Web Audio Api sometimes creates the oscillator
+        // but it can't be found inside Javascript (probably because of)
+        // performance issues, this forces to load audio context
+        // elements
+        if (osc == null) {
+          vol.disconnect();
+          initAudioElements(context);
+        } else {
+          delete currentPlayedOscillators[frequency];
+        }
       });
 
       function initAudioElements(audioContext) {
         window.vol = context.createGain();
         window.currentPlayedOscillators = {};
+
+        vol.gain.linearRampToValueAtTime(1, context.currentTime + decayConstant);
 
         vol.gain.value = 1;
         vol.connect(context.destination);
